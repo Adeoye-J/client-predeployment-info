@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pre-Deployment Client Intake Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .form-content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="number"],
+        .form-group input[type="tel"],
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group input[type="email"]:focus,
+        .form-group input[type="number"]:focus,
+        .form-group input[type="tel"]:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-group small {
+            display: block;
+            margin-top: 5px;
+            color: #666;
+            font-size: 12px;
+        }
+
+        .radio-group, .checkbox-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .radio-group label, .checkbox-group label {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+
+        .radio-group input, .checkbox-group input {
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-reset {
+            background: #f0f0f0;
+            color: #333;
+            flex: 1;
+        }
+
+        .btn-reset:hover {
+            background: #e0e0e0;
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        .success-message {
+            display: none;
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #28a745;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+
+            .form-content {
+                padding: 20px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Pre-Deployment Client Intake Form</h1>
+            <p>Please provide detailed information about your infrastructure, applications, and deployment requirements</p>
+        </div>
+
+        <div class="form-content">
+            <div class="success-message" id="successMessage">
+                ✅ Form submitted successfully! You can now proceed with deployment planning.
+            </div>
+
+            <form id="intakeForm">
+                <!-- SECTION 1: INFRASTRUCTURE & ACCESS -->
+                <div class="section">
+                    <h2 class="section-title">📋 SECTION 1: INFRASTRUCTURE & ACCESS</h2>
+
+                    <div class="form-group">
+                        <label>Do you already have an AWS account with an EC2 instance? <span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="hasEC2" value="yes" required> Yes</label>
+                            <label><input type="radio" name="hasEC2" value="no" required> No</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>If yes, what is the EC2 instance ID or server name?</label>
+                        <input type="text" name="ec2Id" placeholder="e.g., i-0123456789abcdef0 or prod-server-01">
+                    </div>
+
+                    <div class="form-group">
+                        <label>If no, who will provide the EC2 instance?</label>
+                        <input type="text" name="ec2Provider" placeholder="e.g., I will create it, AWS team will, etc.">
+                    </div>
+
+                    <div class="form-group">
+                        <label>What operating system is the EC2 running? <span class="required">*</span></label>
+                        <select name="osType" required>
+                            <option value="">-- Select --</option>
+                            <option value="ubuntu">Ubuntu</option>
+                            <option value="amazon-linux">Amazon Linux</option>
+                            <option value="centos">CentOS</option>
+                            <option value="rhel">RHEL</option>
+                            <option value="debian">Debian</option>
+                            <option value="unknown">Unknown/Not Sure</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>EC2 instance type/size <span class="required">*</span></label>
+                        <input type="text" name="ec2Type" placeholder="e.g., t2.micro, t2.small, t3.medium" required>
+                        <small>Find this in AWS Console → EC2 → Instances</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>EC2 public IP address or domain name <span class="required">*</span></label>
+                        <input type="text" name="ec2IpDomain" placeholder="e.g., 12.34.56.78 or server.example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Can you provide SSH access? How? <span class="required">*</span></label>
+                        <textarea name="sshAccess" placeholder="e.g., I will send you the .pem key file, here are the credentials, etc." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Who is the AWS account owner/administrator?</label>
+                        <input type="text" name="awsAdmin" placeholder="Name and contact email">
+                    </div>
+                </div>
+
+                <!-- SECTION 2: CURRENT POS APPLICATION -->
+                <div class="section">
+                    <h2 class="section-title">🛒 SECTION 2: CURRENT POS APPLICATION</h2>
+
+                    <div class="form-group">
+                        <label>What is the exact name and version of the POS application? <span class="required">*</span></label>
+                        <input type="text" name="posName" placeholder="e.g., RetailPOS v3.2.1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>What port is the POS app running on? <span class="required">*</span></label>
+                        <input type="number" name="posPort" placeholder="e.g., 8080" min="1" max="65535" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>What Java version is it using? <span class="required">*</span></label>
+                        <select name="posJavaVersion" required>
+                            <option value="">-- Select --</option>
+                            <option value="java8">Java 8</option>
+                            <option value="java11">Java 11</option>
+                            <option value="java17">Java 17</option>
+                            <option value="java21">Java 21</option>
+                            <option value="unknown">Unknown</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>What framework is it built on? <span class="required">*</span></label>
+                        <select name="posFramework" required>
+                            <option value="">-- Select --</option>
+                            <option value="spring-boot">Spring Boot</option>
+                            <option value="plain-java">Plain Java</option>
+                            <option value="tomcat">Tomcat</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>How does it start? Is it a system service?</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="posService" value="systemd"> systemd service</label>
+                            <label><input type="radio" name="posService" value="supervisor"> supervisor</label>
+                            <label><input type="radio" name="posService" value="manual"> Manual start</label>
+                            <label><input type="radio" name="posService" value="unknown"> Unknown</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>POS app MySQL database host/address <span class="required">*</span></label>
+                        <input type="text" name="posDbHost" placeholder="e.g., sql123.godaddy.com or 192.168.1.10" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>POS app database name <span class="required">*</span></label>
+                        <input type="text" name="posDbName" placeholder="e.g., pos_database" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Who manages the GoDaddy MySQL account?</label>
+                        <input type="text" name="dbAdmin" placeholder="Name and contact email">
+                    </div>
+                </div>
+
+                <!-- SECTION 3: NEW APPLICATION -->
+                <div class="section">
+                    <h2 class="section-title">🆕 SECTION 3: NEW APPLICATION (Spring/Gradle)</h2>
+
+                    <div class="form-group">
+                        <label>What is the name of the new application? <span class="required">*</span></label>
+                        <input type="text" name="newAppName" placeholder="e.g., Customer Portal" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>What Java version does it require? <span class="required">*</span></label>
+                        <select name="newAppJavaVersion" required>
+                            <option value="">-- Select --</option>
+                            <option value="java11">Java 11</option>
+                            <option value="java17">Java 17</option>
+                            <option value="java21">Java 21</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Does it use Gradle or Maven? <span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="buildTool" value="gradle" required> Gradle</label>
+                            <label><input type="radio" name="buildTool" value="maven" required> Maven</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Gradle/Maven version</label>
+                        <input type="text" name="buildToolVersion" placeholder="e.g., Gradle 8.0 or Maven 3.9">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Git repository URL <span class="required">*</span></label>
+                        <input type="text" name="gitUrl" placeholder="e.g., https://github.com/yourcompany/app" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>What branch to deploy from? <span class="required">*</span></label>
+                        <input type="text" name="gitBranch" placeholder="e.g., main, master, production" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Git credentials <span class="required">*</span></label>
+                        <textarea name="gitCredentials" placeholder="Username/email and password or personal access token" required></textarea>
+                        <small>⚠️ Make sure to use a personal access token, not your actual password</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Is the repository public or private? <span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="gitVisibility" value="public" required> Public</label>
+                            <label><input type="radio" name="gitVisibility" value="private" required> Private</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>What port should the new app run on? <span class="required">*</span></label>
+                        <input type="number" name="newAppPort" placeholder="e.g., 8081" min="1" max="65535" required>
+                        <small>Must be different from POS app port</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Will the new app use the same MySQL database as POS, or a different one? <span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="dbUsage" value="same" required> Same database</label>
+                            <label><input type="radio" name="dbUsage" value="different" required> Different database</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>If same database, which tables/schemas does it need access to?</label>
+                        <textarea name="dbTables" placeholder="e.g., customers, orders, products"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>New app database credentials (username, password)</label>
+                        <textarea name="newAppDbCreds" placeholder="Username and password for the new app to connect to database"></textarea>
+                        <small>⚠️ Ensure this is communicated securely</small>
+                    </div>
+                </div>
+
+                <!-- SECTION 4: DEPLOYMENT APPROACH -->
+                <div class="section">
+                    <h2 class="section-title">🚀 SECTION 4: DEPLOYMENT APPROACH</h2>
+
+                    <div class="form-group">
+                        <label>Should the new app run on the same EC2 or separate? <span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="serverPlacement" value="same" required> Same EC2</label>
+                            <label><input type="radio" name="serverPlacement" value="separate" required> Separate EC2</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Do you want staging/test environment first? <span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="staging" value="yes" required> Yes, test first</label>
+                            <label><input type="radio" name="staging" value="no" required> No, go straight to production</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Acceptable downtime? <span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="downtime" value="zero" required> Zero downtime</label>
+                            <label><input type="radio" name="downtime" value="window" required> Maintenance window OK</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>When should this deployment happen? <span class="required">*</span></label>
+                        <input type="text" name="deploymentDate" placeholder="e.g., December 15, 2025 at 2 AM EST" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Who needs to review/approve before going live?</label>
+                        <input type="text" name="approvers" placeholder="Names and email addresses">
+                    </div>
+
+                    <div class="form-group">
+                        <label>What testing should be done before production?</label>
+                        <textarea name="testingRequirements" placeholder="e.g., Load testing, API testing, User acceptance testing, etc."></textarea>
+                    </div>
+                </div>
+
+                <!-- SECTION 5: SECURITY & MONITORING -->
+                <div class="section">
+                    <h2 class="section-title">🔒 SECTION 5: SECURITY & MONITORING</h2>
+
+                    <div class="form-group">
+                        <label>Any specific security requirements? <span class="required">*</span></label>
+                        <textarea name="securityRequirements" placeholder="e.g., SSL certificates, firewall rules, VPN access, etc." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Are there compliance requirements?</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" name="compliance" value="pci"> PCI-DSS</label>
+                            <label><input type="checkbox" name="compliance" value="hipaa"> HIPAA</label>
+                            <label><input type="checkbox" name="compliance" value="gdpr"> GDPR</label>
+                            <label><input type="checkbox" name="compliance" value="sox"> SOX</label>
+                            <label><input type="checkbox" name="compliance" value="none"> None</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Should the new app be publicly accessible or internal only? <span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="accessibility" value="public" required> Public</label>
+                            <label><input type="radio" name="accessibility" value="internal" required> Internal only</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>How should we monitor the new application?</label>
+                        <input type="text" name="monitoring" placeholder="e.g., CloudWatch, Datadog, ELK stack, etc.">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Where should application logs be stored?</label>
+                        <input type="text" name="logStorage" placeholder="e.g., CloudWatch, S3, file system, etc.">
+                    </div>
+
+                    <div class="form-group">
+                        <label>What should happen if the app crashes?</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="crashBehavior" value="auto-restart"> Auto-restart</label>
+                            <label><input type="radio" name="crashBehavior" value="alert"> Alert and wait</label>
+                            <label><input type="radio" name="crashBehavior" value="unsure"> Not sure</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 6: BACKUP & ROLLBACK -->
+                <div class="section">
+                    <h2 class="section-title">💾 SECTION 6: BACKUP & ROLLBACK</h2>
+
+                    <div class="form-group">
+                        <label>Do you have a database backup strategy? <span class="required">*</span></label>
+                        <textarea name="backupStrategy" placeholder="e.g., Daily automated backups via GoDaddy, manual backups, etc." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>If something goes wrong, can we roll back? <span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="rollback" value="yes" required> Yes</label>
+                            <label><input type="radio" name="rollback" value="no" required> No</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Are there database migrations needed?</label>
+                        <textarea name="migrations" placeholder="Describe any database schema changes or migrations needed"></textarea>
+                    </div>
+                </div>
+
+                <!-- SECTION 7: COMMUNICATION & SUPPORT -->
+                <div class="section">
+                    <h2 class="section-title">📞 SECTION 7: COMMUNICATION & SUPPORT</h2>
+
+                    <div class="form-group">
+                        <label>Primary contact person <span class="required">*</span></label>
+                        <input type="text" name="primaryContact" placeholder="Name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Primary contact email <span class="required">*</span></label>
+                        <input type="email" name="primaryEmail" placeholder="email@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Primary contact phone</label>
+                        <input type="tel" name="primaryPhone" placeholder="+1 (555) 123-4567">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Secondary contact (for escalations)</label>
+                        <input type="text" name="secondaryContact" placeholder="Name">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Secondary contact email</label>
+                        <input type="email" name="secondaryEmail" placeholder="email@example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label>How should issues be reported?</label>
+                        <textarea name="issueReporting" placeholder="e.g., Email, Slack, phone call, support ticket, etc."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Post-deployment support needed?</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="postSupport" value="yes"> Yes</label>
+                            <label><input type="radio" name="postSupport" value="no"> No</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>If yes, for how long?</label>
+                        <input type="text" name="supportDuration" placeholder="e.g., 24 hours, 1 week, ongoing">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Where should I document deployment steps?</label>
+                        <input type="text" name="documentation" placeholder="e.g., Confluence, Google Drive, GitHub Wiki, etc.">
+                    </div>
+                </div>
+
+                <!-- SECTION 8: TIMELINE & BUDGET -->
+                <div class="section">
+                    <h2 class="section-title">⏰ SECTION 8: TIMELINE & BUDGET</h2>
+
+                    <div class="form-group">
+                        <label>Project deadline</label>
+                        <input type="text" name="deadline" placeholder="e.g., December 20, 2025">
+                    </div>
+
+                    <div class="form-group">
+                        <label>How many hours have you allocated for this project?</label>
+                        <input type="number" name="allocatedHours" placeholder="e.g., 40">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Budget for infrastructure costs?</label>
+                        <input type="text" name="budget" placeholder="e.g., $5000, No budget constraints, etc.">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Are there other dependencies or teams involved?</label>
+                        <textarea name="dependencies" placeholder="e.g., Database team needs to migrate data first, security audit needed, etc."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Any ongoing changes to either application I should know about?</label>
+                        <textarea name="ongoingChanges" placeholder="e.g., Major release coming in January, bug fixes in progress, etc."></textarea>
+                    </div>
+                </div>
+
+                <!-- FINAL SECTION -->
+                <div class="section">
+                    <h2 class="section-title">📝 FINAL NOTES</h2>
+
+                    <div class="form-group">
+                        <label>Any additional information or special requirements?</label>
+                        <textarea name="additionalNotes" placeholder="Anything else I should know..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" name="confirmation" required>
+                            I confirm that all information provided above is accurate <span class="required">*</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="reset" class="btn-reset">Clear Form</button>
+                    <button type="submit" class="btn-submit">Submit & Generate Report</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('intakeForm');
+        const successMessage = document.getElementById('successMessage');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Collect all form data
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+
+            // Create a detailed report
+            const report = generateReport(data);
+
+            // Save to localStorage
+            try {
+                localStorage.setItem('intakeFormData', JSON.stringify(data));
+                localStorage.setItem('intakeFormReport', report);
+            } catch (e) {
+                console.log('localStorage not available, data will be shown in output');
+            }
+
+            // Display success message
+            successMessage.style.display = 'block';
+            successMessage.scrollIntoView({ behavior: 'smooth' });
+
+            // Show the report
+            showReport(report, data);
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        function generateReport(data) {
+            let report = '=== PRE-DEPLOYMENT CLIENT INTAKE REPORT ===\n\n';
+            report += `Generated: ${new Date().toLocaleString()}\n`;
+            report += `Client Contact: ${data.primaryContact || 'N/A'}\n`;
+            report += `Email: ${data.primaryEmail || 'N/A'}\n\n`;
+
+            for (let key in data) {
+                if (data[key]) {
+                    const label = key.replace(/([A-Z])/g, ' $1').toUpperCase();
+                    report += `${label}: ${data[key]}\n`;
+                }
+            }
+
+            return report;
+        }
+
+        function showReport(report, data) {
+            // Create a modal-like display for the report
+            const reportWindow = window.open('', 'Report', 'width=900,height=600');
+            reportWindow.document.write('<pre style="font-family: monospace; padding: 20px;">' + escapeHtml(report) + '</pre>');
+            reportWindow.document.write('<hr><p style="padding: 20px;"><button onclick="window.print()">Print</button> <button onclick="window.close()">Close</button></p>');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
